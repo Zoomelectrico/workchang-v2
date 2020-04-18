@@ -2,6 +2,8 @@ import { Schema, model, Document, HookNextFunction } from 'mongoose';
 import slugs from 'slugs';
 import bcrypt from 'bcryptjs';
 
+type comparePasswordFunction = (candidate: string) => Promise<boolean>;
+
 export type UserDocument = Document & {
   slug: string;
   dni: string;
@@ -20,11 +22,12 @@ export type UserDocument = Document & {
   type?: number; // ?
   resetToken?: string;
   resetTokenExpiry?: number;
+  comparePassword: comparePasswordFunction;
   createdAt: Date;
   updatedAt: Date;
 };
 
-const userSchema = new Schema(
+const userSchema = new Schema<UserDocument>(
   {
     slug: {
       type: String,

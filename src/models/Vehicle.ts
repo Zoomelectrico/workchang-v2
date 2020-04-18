@@ -1,11 +1,13 @@
 import { Schema, Document, model } from 'mongoose';
+import { BrandDocument } from './Brand';
+import { ModelDocument } from './Model';
 
 export type VehicleDocument = Document & {
   motorSerial: string;
   bodySerial: string;
   plate: string;
-  brand: Schema.Types.ObjectId; //! Add model "brand"
-  model: Schema.Types.ObjectId; //! Add model "model"
+  brand: Schema.Types.ObjectId | BrandDocument;
+  model: Schema.Types.ObjectId | ModelDocument;
   version: string;
   year: number;
   photo: string;
@@ -15,7 +17,7 @@ export type VehicleDocument = Document & {
   updatedAt: Date;
 };
 
-const vehicleSchema = new Schema(
+const vehicleSchema = new Schema<VehicleDocument>(
   {
     motorSerial: {
       type: String,
