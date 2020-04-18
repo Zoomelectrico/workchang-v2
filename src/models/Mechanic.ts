@@ -1,7 +1,8 @@
 import { Schema, model, Document } from 'mongoose';
+import { RepairDocument } from './Repair';
 
 export type MechanicDocument = Document & {
-  repairs: [Schema.Types.ObjectId]; //! Create model Repairs
+  repairs: [Schema.Types.ObjectId | RepairDocument];
   createdAt: Date;
   updatedAt: Date;
 };
