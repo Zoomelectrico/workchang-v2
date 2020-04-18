@@ -1,6 +1,7 @@
 import { Schema, Document, model } from 'mongoose';
 import { BrandDocument } from './Brand';
 import { ModelDocument } from './Model';
+import { ClientDocument } from './Client';
 
 export type VehicleDocument = Document & {
   motorSerial: string;
@@ -12,7 +13,7 @@ export type VehicleDocument = Document & {
   year: number;
   photo: string;
   active: boolean;
-  owner: Schema.Types.ObjectId; //! Add model "client"
+  owner: Schema.Types.ObjectId | ClientDocument;
   createdAt: Date;
   updatedAt: Date;
 };
