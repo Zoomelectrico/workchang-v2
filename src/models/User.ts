@@ -1,6 +1,10 @@
 import { Schema, model, Document, HookNextFunction } from 'mongoose';
 import slugs from 'slugs';
 import bcrypt from 'bcryptjs';
+import { ClientDocument } from './Client';
+import { MechanicDocument } from './Mechanic';
+import { ManagerDocument } from './Manager';
+import { AdministratorDocument } from './Administrator';
 
 type comparePasswordFunction = (candidate: string) => Promise<boolean>;
 
@@ -10,16 +14,12 @@ export type UserDocument = Document & {
   name: string;
   email: string;
   password: string;
-  address: {
-    country: string;
-    state: string;
-    city: string;
-    county: string;
-    zipCode: string;
-    street: string;
-  };
   photo: string;
-  type?: number; // ?
+  privilege: number; // 0: client, 1: mechanic, 2: manager, 3: administrator
+  client?: Schema.Types.ObjectId | ClientDocument;
+  mechanic?: Schema.Types.ObjectId | MechanicDocument;
+  manager?: Schema.Types.ObjectId | ManagerDocument;
+  administrator?: Schema.Types.ObjectId | AdministratorDocument;
   resetToken?: string;
   resetTokenExpiry?: number;
   comparePassword: comparePasswordFunction;
@@ -43,44 +43,36 @@ const userSchema = new Schema<UserDocument>(
     email: {
       type: String,
       required: 'Please provide a Email',
+      unique: true,
       //! need validations
     },
     password: {
       type: String,
       required: 'Please provide a password',
     },
-    address: {
-      country: {
-        type: String,
-        required: 'Please provide a Country',
-      },
-      state: {
-        type: String,
-        required: 'Please provide a State',
-      },
-      city: {
-        type: String,
-        required: 'Please provide a City',
-      },
-      county: {
-        type: String,
-        required: 'Please provide a County',
-      },
-      zipCode: {
-        type: String,
-        required: 'Please provide a Zip Code',
-      },
-      street: {
-        type: String,
-        required: 'Please provide a Street',
-      },
-    },
     photo: {
       type: String,
       required: 'Please provide a Photo',
     },
-    type: {
-      type: Number, // ?
+    privilege: {
+      type: Number, // 0: client, 1: mechanic, 2: manager, 3: administrator
+      default: 0,
+    },
+    client: {
+      type: Schema.Types.ObjectId,
+      ref: 'Client',
+    },
+    mechanic: {
+      type: Schema.Types.ObjectId,
+      ref: 'Mechanic',
+    },
+    manager: {
+      type: Schema.Types.ObjectId,
+      ref: 'Manager',
+    },
+    administrator: {
+      type: Schema.Types.ObjectId,
+      ref: 'Administrator',
     },
     resetToken: String,
     resetTokenExpiry: String,
