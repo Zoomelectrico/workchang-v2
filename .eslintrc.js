@@ -99,6 +99,7 @@ module.exports = {
         'printWidth': 80
       }
     ],
+    'import/no-cycle': 'off',
   },
   settings: {
     'import/resolver': {
